@@ -3,7 +3,7 @@ FROM debian:latest
 RUN apt update && \
     apt full-upgrade -y && \
     apt autoremove --purge -y && \
-    apt install libnetfilter-queue-dev build-essential git -y && \
+    apt install libnetfilter-queue-dev libnfnetlink-dev build-essential git -y && \
     git clone https://github.com/MikeWang000000/FakeHTTP && cd FakeHTTP && \
     make -j$(nproc) STATIC=1 && \
     strip -s -w src/fakehttp
