@@ -3,19 +3,12 @@ FROM debian:latest
 RUN apt update && \
     apt full-upgrade -y && \
     apt autoremove --purge -y && \
-    apt install libnetfilter-queue-dev libnfnetlink-dev build-essential git -y && \
-    git clone https://github.com/MikeWang000000/FakeHTTP && cd FakeHTTP && \
-    make -j$(nproc) STATIC=1 && \
-    strip -s -w src/fakehttp
-
-FROM debian:latest
-COPY --from=0 /FakeHTTP/src/fakehttp /usr/bin/fakehttp
-
-RUN apt update && \
-    apt full-upgrade -y && \
-    apt autoremove --purge -y && \
-    apt install nftables -y && \
-    rm -rf /var/lib/apt/lists/*
+    apt install nftables wget -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget -O fakehttp-linux-x86_64.tar.gz https://github.com/MikeWang000000/FakeHTTP/releases/download/0.9.18/fakehttp-linux-x86_64.tar.gz && \
+    tar xf fakehttp-linux-x86_64.tar.gz && rm -f fakehttp-linux-x86_64.tar.gz && \
+    mv -f fakehttp-linux-x86_64/fakehttp /usr/bin/fakehttp && \
+    rm -fr fakehttp-linux-x86_64
 
 ENTRYPOINT ["fakehttp"]
 CMD []
